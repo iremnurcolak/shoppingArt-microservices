@@ -23,7 +23,7 @@ public class ShoppingAppInventoryServiceApplication {
 
 			Inventory inventory1 = new Inventory();
 			inventory1.setSkuCode("xiaomi_12t");
-			inventory1.setQuantity(0);
+			inventory1.setQuantity(4);
 
 			inventoryRepository.save(inventory);
 			inventoryRepository.save(inventory1);

@@ -1,5 +1,6 @@
 package com.lobemus.shoppingApporderService.service;
 
+import com.lobemus.shoppingApporderService.dto.InventoryResponse;
 import com.lobemus.shoppingApporderService.dto.OrderLineItemsDto;
 import com.lobemus.shoppingApporderService.dto.OrderRequest;
 import com.lobemus.shoppingApporderService.model.Order;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,14 +43,17 @@ public class OrderService {
         //stok sipariş icin yetersizse stokta kalan miktar donulmeli
 
         //Call Inventory service, and place order if product is in stock
-        //SYNC REQUEST
-        Boolean result = webClient.get()
+        //SYNC Communication
+        InventoryResponse[] inventoryResponses = webClient.get()
                 .uri("http://localhost:8082/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                         .retrieve()
-                                .bodyToMono(Boolean.class)
+                                .bodyToMono(InventoryResponse[].class)
                                         .block();
-        if(result) {
+        boolean allProductsInStock = Arrays.stream(inventoryResponses)
+                .allMatch(inventoryResponse -> inventoryResponse.isInStock());
+
+        if(allProductsInStock) {
             orderRepository.save(order);
         }
         else {
