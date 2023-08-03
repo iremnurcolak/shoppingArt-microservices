@@ -20,6 +20,7 @@
         <module>shoppingArt-orderService</module>
         <module>shoppingArt-inventoryService</module>
         <module>shoppingArt-discoveryServer</module>
+        <module>shoppingArt-apiGateway</module>
     </modules>
 
     <properties>
