@@ -24,8 +24,7 @@ public class OrderService {
 
     //var name should be same with the bean method name
     private final WebClient.Builder webClientBuilder;
-    public void placeOrder(OrderRequest orderRequest)
-    {
+    public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
         List<OrderLineItems> orderLineItemsList =
@@ -55,11 +54,11 @@ public class OrderService {
 
         if(allProductsInStock) {
             orderRepository.save(order);
+            return "Order placed successfully!";
         }
         else {
             throw new IllegalArgumentException("Product is not in the stock, try again later!");
         }
-
     }
 
     private OrderLineItems mapToOrder(OrderLineItemsDto orderLineItemsDto) {
